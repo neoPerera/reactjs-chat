@@ -17,6 +17,7 @@ class ChatScreen extends React.Component
   constructor(props)
   {
     super(props);
+    
     this.state =
     {
       
@@ -28,6 +29,13 @@ class ChatScreen extends React.Component
       
 
     }
+    if(!queryString.parse(props.location.search).name || !queryString.parse(props.location.search).room)
+    {
+      alert("Please log in");
+      props.history.push('/');
+    }
+
+
     socket = io(this.state.ENDPOINT);
    
     
