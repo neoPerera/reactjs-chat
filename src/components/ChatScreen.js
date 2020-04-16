@@ -20,7 +20,7 @@ class ChatScreen extends React.Component
       
       UserName: queryString.parse(props.location.search).name,
       Room: queryString.parse(props.location.search).room,
-      ENDPOINT: 'localhost:5000',
+      ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
       gotMessages: [],
       sendMessage: ''
       
@@ -93,6 +93,9 @@ sendButtonPressed =() =>
 {
   console.log(this.state.gotMessages);
   socket.emit('sendMessage', {User:this.state.UserName ,Text: this.state.sendMessage });
+  this.setState({
+    sendMessage: ''
+  });
 }
 textAreacChanged = (e) =>
 {
@@ -140,10 +143,9 @@ textAreacChanged = (e) =>
                       </ul>
                     </div>
                   </div>
-                  
+                  <div className="card-body msg_card_body">
                     
-                  <ScrollToBottom className="card-body msg_card_body">
-                    <div className="card-body msg_card_body">
+                      <ScrollToBottom className="msgbox App">
                     {
                       this.state.gotMessages.map(
                         (item)=>
@@ -167,17 +169,17 @@ textAreacChanged = (e) =>
                     }
                     
                     
-                    </div>
                     
-                    </ ScrollToBottom >
                     
-                  
+                    
+                    </ScrollToBottom>
+                  </div>
                   <div className="card-footer">
                     <div className="input-group">
                       <div className="input-group-append">
                         <span className="input-group-text attach_btn"><i className="fas fa-paperclip"></i></span>
                       </div>
-                      <textarea onChange={this.textAreacChanged} name="" className="form-control type_msg" placeholder="Type your message..."></textarea>
+                      <textarea value={this.state.sendMessage} onChange={this.textAreacChanged} name="" className="form-control type_msg" placeholder="Type your message..."></textarea>
                       <div className="input-group-append" onClick={this.sendButtonPressed}>
                         <span  className="input-group-text send_btn"><i  className="fas fa-location-arrow"></i></span>
                       </div>
