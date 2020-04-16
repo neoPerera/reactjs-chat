@@ -4,7 +4,7 @@ import '../styles/ChatScreen.css'
 import queryString from 'query-string';
 import io from 'socket.io-client';
 // import { Link } from "react-router-dom";
-
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 
 let socket;
@@ -20,7 +20,7 @@ class ChatScreen extends React.Component
       
       UserName: queryString.parse(props.location.search).name,
       Room: queryString.parse(props.location.search).room,
-      ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
+      ENDPOINT: 'localhost:5000',
       gotMessages: [],
       sendMessage: ''
       
@@ -140,9 +140,10 @@ textAreacChanged = (e) =>
                       </ul>
                     </div>
                   </div>
-                  <div className="card-body msg_card_body">
+                  
                     
-
+                  <ScrollToBottom className="card-body msg_card_body">
+                  <div className="card-body msg_card_body">
                     {
                       this.state.gotMessages.map(
                         (item)=>
@@ -166,11 +167,11 @@ textAreacChanged = (e) =>
                     }
                     
                     
+                    </div>
                     
+                    </ ScrollToBottom >
                     
-                    
-                    
-                  </div>
+                  
                   <div className="card-footer">
                     <div className="input-group">
                       <div className="input-group-append">
