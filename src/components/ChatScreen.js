@@ -143,7 +143,7 @@ textAreacChanged = (e) =>
                   
                     
                   <ScrollToBottom className="card-body msg_card_body">
-                  <div className="card-body msg_card_body">
+                    <div className="card-body msg_card_body">
                     {
                       this.state.gotMessages.map(
                         (item)=>
