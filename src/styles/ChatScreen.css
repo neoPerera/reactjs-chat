@@ -3,6 +3,8 @@
     margin-bottom: auto;
     
 }
+
+
 .card{
     height: 500px;
     border-radius: 15px !important;
@@ -147,6 +149,12 @@ background-color: #82ccdd;
 padding: 10px;
 position: relative;
 max-width: 400px;
+}
+.AdminsMsg
+{
+    background-color:white;
+    width: 100%;
+    border-radius: 0px;
 }
 .msg_cotainer_send{
 margin-top: auto;

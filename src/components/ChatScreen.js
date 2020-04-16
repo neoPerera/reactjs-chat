@@ -3,8 +3,10 @@ import React from 'react'
 import '../styles/ChatScreen.css'
 import queryString from 'query-string';
 import io from 'socket.io-client';
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ScrollToBottom from 'react-scroll-to-bottom';
+import  SMessageBox from './MessageBox';
+import  RMessageBox from './RMessageBox';
 
 
 let socket;
@@ -20,7 +22,7 @@ class ChatScreen extends React.Component
       
       UserName: queryString.parse(props.location.search).name,
       Room: queryString.parse(props.location.search).room,
-      ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
+      ENDPOINT: 'https://git.heroku.com/neo-chatv1.git',
       gotMessages: [],
       sendMessage: ''
       
@@ -41,7 +43,11 @@ class ChatScreen extends React.Component
       
     // );
     console.log( this.state.UserName);
-    socket.emit('join', {UserName: this.state.UserName, Room: this.state.Room})
+    socket.emit('join', {UserName: this.state.UserName, Room: this.state.Room}, ()=>
+    {
+      alert("ERROR");
+      this.props.history.push('/')
+    })
     
     socket.on('message',
       (getMessage) =>
@@ -61,22 +67,12 @@ class ChatScreen extends React.Component
 }
 // componentDidUpdate(prevProps, prevState) 
 // {
-//   socket.on('message',
-//   (getMessage) =>
+//   if(prevState.socket != socket)
 //   {
-//     this.setState({
-//       gotMessages: [...this.state.gotMessages,getMessage]
-//     },
-//     ()=>
-//     {
-//       console.log(this.state.gotMessages);
-//     }
-//     );
-    
+//     socket.emit('join', {UserName: this.state.UserName, Room: this.state.Room})
+
 //   }
-  
-  
-// );
+
 // }
 
 
@@ -113,11 +109,7 @@ textAreacChanged = (e) =>
 
   render()
   {
-    if(this.state.UserName =='')
-    {
-      return(<link to="/" />);
-    }
-
+    
     return(
         <div className="container-fluid h-100">
             <div className="row justify-content-center h-100">
@@ -133,47 +125,31 @@ textAreacChanged = (e) =>
                       </div>
                       
                     </div>
-                    <span id="action_menu_btn"><h3>X </h3></span>
-                    <div className="action_menu">
-                      <ul>
-                        <li><i className="fas fa-user-circle"></i> View profile</li>
-                        <li><i className="fas fa-users"></i> Add to close friends</li>
-                        <li><i className="fas fa-plus"></i> Add to group</li>
-                        <li><i className="fas fa-ban"></i> Block</li>
-                      </ul>
-                    </div>
+                   <a href="/" >
+                     <span id="action_menu_btn"><h3>X</h3> </span> </a>
+                    
                   </div>
+
+                  <ScrollToBottom className="card-body msg_card_body">
                   <div className="card-body msg_card_body">
-                    
-                      <ScrollToBottom className="msgbox App">
-                    {
-                      this.state.gotMessages.map(
-                        (item)=>
-                          item.User == this.state.UserName?
-                          <div className="d-flex justify-content-end mb-4">
-                          <div className="msg_cotainer_send">
-                          {item.Text}
-                        
-                          </div>
-                      
-                          </div> :
-                          <div className="d-flex justify-content-start mb-4">
-                      
-                            <div className="msg_cotainer">
-                              {item.Text}
-                              
-                            </div>
-                          </div>
-                        
-                      )
-                    }
-                    
-                    
-                    
-                    
-                    
-                    </ScrollToBottom>
-                  </div>
+                                             
+                                            
+                                    
+                                     {
+                                       this.state.gotMessages.map(
+                                         (item)=>
+                                           item.User == this.state.UserName?
+                                           <SMessageBox MSG={item.Text} />
+                                            :
+                                            <RMessageBox MSG={item.Text} UNAME={item.User} />
+                                         
+                                       )
+                                     }
+                                    
+                                   </div>
+                  </ScrollToBottom>
+
+
                   <div className="card-footer">
                     <div className="input-group">
                       <div className="input-group-append">
