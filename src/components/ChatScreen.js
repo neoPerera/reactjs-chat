@@ -22,7 +22,7 @@ class ChatScreen extends React.Component
       
       UserName: queryString.parse(props.location.search).name,
       Room: queryString.parse(props.location.search).room,
-      ENDPOINT: 'https://git.heroku.com/neo-chatv1.git',
+      ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
       gotMessages: [],
       sendMessage: ''
       
