@@ -149,6 +149,7 @@ background-color: #82ccdd;
 padding: 10px;
 position: relative;
 max-width: 400px;
+min-width: 70px;
 }
 .AdminsMsg
 {
@@ -165,6 +166,7 @@ background-color: #78e08f;
 padding: 10px;
 position: relative;
 max-width: 400px;
+min-width: 70px;
 }
 .msg_time{
 position: absolute;

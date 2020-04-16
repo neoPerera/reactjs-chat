@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import ScrollToBottom from 'react-scroll-to-bottom';
 import  SMessageBox from './MessageBox';
 import  RMessageBox from './RMessageBox';
+import TypingMessage from './TypingMessage';
 
 
 let socket;
@@ -25,7 +26,8 @@ class ChatScreen extends React.Component
       Room: queryString.parse(props.location.search).room,
       ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
       gotMessages: [],
-      sendMessage: ''
+      sendMessage: '',
+      typing: []
       
 
     }
@@ -43,13 +45,6 @@ class ChatScreen extends React.Component
   }
   componentDidMount()
   {
-    // this.setState(
-    //   {
-    //     UserName: this.state.data.name,
-    //     Room: this.state.data.room,
-    //   },
-      
-    // );
     console.log( this.state.UserName);
     socket.emit('join', {UserName: this.state.UserName, Room: this.state.Room}, ()=>
     {
@@ -69,23 +64,22 @@ class ChatScreen extends React.Component
       
       
     );
+    socket.on('sendtyping',
+      (getProps) =>
+      {
+        if(getProps.User != this.state.UserName)
+        {
+          console.log('typing recived');
+          this.setState({typing: getProps});
+        }
+      }
+      
+      
+    );
     
       
 
 }
-// componentDidUpdate(prevProps, prevState) 
-// {
-//   if(prevState.socket != socket)
-//   {
-//     socket.emit('join', {UserName: this.state.UserName, Room: this.state.Room})
-
-//   }
-
-// }
-
-
-
-
 
 componentWillUnmount()
 {
@@ -100,9 +94,21 @@ sendButtonPressed =() =>
   this.setState({
     sendMessage: ''
   });
+  socket.emit('typing', {User:this.state.UserName, Typing: false});
 }
 textAreacChanged = (e) =>
 {
+  if(e.target.value != '')
+  {
+    console.log('typing');
+    socket.emit('typing', {User:this.state.UserName, Typing: true});
+
+
+  }
+  else if(e.target.value == '')
+  {
+    socket.emit('typing', {User:this.state.UserName, Typing: false});
+  }
   this.setState({
     sendMessage: e.target.value
   }
@@ -110,10 +116,6 @@ textAreacChanged = (e) =>
   );
 
 }
-
-
-    
-
 
   render()
   {
@@ -140,7 +142,7 @@ textAreacChanged = (e) =>
 
                   <ScrollToBottom className="card-body msg_card_body">
                   <div className="card-body msg_card_body">
-                                             
+                                            
                                             
                                     
                                      {
@@ -155,6 +157,9 @@ textAreacChanged = (e) =>
                                      }
                                     
                                    </div>
+                                   {this.state.UserName != this.state.typing.User&&<TypingMessage props={this.state.typing}/>}
+                                   
+                                   {/* {this.state.typing.Typing?<RMessageBox MSG='someone is typing' UNAME='alex' />:null} */}
                   </ScrollToBottom>
 
 
