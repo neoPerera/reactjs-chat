@@ -8,6 +8,8 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import  SMessageBox from './MessageBox';
 import  RMessageBox from './RMessageBox';
 import TypingMessage from './TypingMessage';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Dropdown } from 'react-bootstrap';
 
 
 let socket;
@@ -27,7 +29,8 @@ class ChatScreen extends React.Component
       ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
       gotMessages: [],
       sendMessage: '',
-      typing: []
+      typing: [],
+      MemberList: []
       
 
     }
@@ -76,6 +79,15 @@ class ChatScreen extends React.Component
       
       
     );
+    socket.on('sendMemberList',
+    (getProps) =>
+    {
+      this.setState({MemberList: getProps});
+      console.log('got memberlist ' + JSON.stringify(this.state.MemberList));
+    }
+    
+    
+  );
     
       
 
@@ -83,39 +95,66 @@ class ChatScreen extends React.Component
 
 componentWillUnmount()
 {
-  socket.emit('disconnect');
+  socket.emit('disconnect'); 
   socket.off();
 }
 
 sendButtonPressed =() =>
 {
   console.log(this.state.gotMessages);
-  socket.emit('sendMessage', {User:this.state.UserName ,Text: this.state.sendMessage });
+  socket.emit('sendMessage', {User:this.state.UserName ,Text: this.state.sendMessage }
+  , ()=>
+    {
+      alert("ERROR");
+      this.props.history.push('/')
+    });
   this.setState({
     sendMessage: ''
   });
-  socket.emit('typing', {User:this.state.UserName, Typing: false});
+  socket.emit('typing', {User:this.state.UserName, Typing: false} , ()=>
+  {
+    alert("ERROR");
+    this.props.history.push('/')
+  });
 }
 textAreacChanged = (e) =>
 {
-  if(e.target.value != '')
-  {
-    console.log('typing');
-    socket.emit('typing', {User:this.state.UserName, Typing: true});
+    if(e.target.value != '')
+    {
+      console.log('typing');
+      socket.emit('typing', {User:this.state.UserName, Typing: true} , ()=>
+      {
+        alert("ERROR");
+        this.props.history.push('/')
+      });
 
 
-  }
-  else if(e.target.value == '')
-  {
-    socket.emit('typing', {User:this.state.UserName, Typing: false});
-  }
-  this.setState({
-    sendMessage: e.target.value
-  }
+    }
+    else if(e.target.value == '')
+    {
+      socket.emit('typing', {User:this.state.UserName, Typing: false} , ()=>
+      {
+        alert("ERROR");
+        this.props.history.push('/')
+      });
+    }
+    this.setState({
+      sendMessage: e.target.value
+    }
 
-  );
+    );
 
 }
+GetMembers =() =>
+{
+  socket.emit('getmemberslist', {User:this.state.UserName}  , ()=>
+  {
+    alert("ERROR");
+    this.props.history.push('/')
+  });
+  console.log('drop down pressed');
+
+} 
 
   render()
   {
@@ -130,11 +169,21 @@ textAreacChanged = (e) =>
                     <div className="d-flex bd-highlight">
                       
                       <div className="user_info">
-                        <span>Room: {this.state.Room}</span>
+                        
                         
                       </div>
                       
                     </div>
+                    <Dropdown onClick={this.GetMembers} >
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Members in Room: {this.state.Room}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                          {this.state.MemberList.map((user) => <Dropdown.Item >{user.UserName}</Dropdown.Item>)}
+                        
+                      </Dropdown.Menu>
+                    </Dropdown>
                    <a href="/" >
                      <span id="action_menu_btn"><h3>X</h3> </span> </a>
                     
@@ -149,7 +198,7 @@ textAreacChanged = (e) =>
                                        this.state.gotMessages.map(
                                          (item)=>
                                            item.User == this.state.UserName?
-                                           <SMessageBox MSG={item.Text} />
+                                            <SMessageBox MSG={item.Text} />
                                             :
                                             <RMessageBox MSG={item.Text} UNAME={item.User} />
                                          

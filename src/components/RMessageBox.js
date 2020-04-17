@@ -21,8 +21,8 @@ const RMessageBox = ({MSG, UNAME}) =>
     {
         return (
             <div className="d-flex justify-content-start mb-4">
-                                                 
-                 <div className="msg_cotainer  ">
+                <label className="d-flex justify-content-start mb-4" >{UNAME}:</label>                               
+                <div className="msg_cotainer  ">
                   {MSG}
                                                          
                 </div>
