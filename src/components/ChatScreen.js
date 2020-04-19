@@ -172,7 +172,7 @@ GetMembers =() =>
                       </Dropdown.Menu>
                     </Dropdown>
                    <a href="/" >
-                     <span id="action_menu_btn"><h3>X</h3> </span> </a>
+                     <span id="action_menu_btn"><h3>Log out</h3> </span> </a>
                     
                   </div>
 
