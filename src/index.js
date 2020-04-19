@@ -12,11 +12,20 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import ChatScreen from './components/ChatScreen';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
+
+
+
+
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route path="/" exact component={App} />
-      <Route path="/chatlist" component={ChatScreen} />
+      <Provider store={store}>
+        <Route path="/" exact component={App} />
+        <Route path="/chatlist" component={ChatScreen} />
+      </Provider>
     </Switch>
   </Router>,
   document.getElementById('root')

@@ -3,17 +3,16 @@ import React from 'react'
 import '../styles/ChatScreen.css'
 import queryString from 'query-string';
 import io from 'socket.io-client';
-import { Link } from "react-router-dom";
 import ScrollToBottom from 'react-scroll-to-bottom';
 import  SMessageBox from './MessageBox';
 import  RMessageBox from './RMessageBox';
 import TypingMessage from './TypingMessage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown } from 'react-bootstrap';
+import {connect} from 'react-redux';
 
 
 let socket;
-let history;
 class ChatScreen extends React.Component
 {
   
@@ -24,8 +23,10 @@ class ChatScreen extends React.Component
     this.state =
     {
       
-      UserName: queryString.parse(props.location.search).name,
-      Room: queryString.parse(props.location.search).room,
+      //UserName: queryString.parse(props.location.search).name,
+      // Room: queryString.parse(props.location.search).room,
+      UserName: this.props.User.UserName,
+      Room: this.props.User.Room,
       ENDPOINT: 'https://neo-chatv1.herokuapp.com/',
       gotMessages: [],
       sendMessage: '',
@@ -34,17 +35,11 @@ class ChatScreen extends React.Component
       
 
     }
-    if(!queryString.parse(props.location.search).name || !queryString.parse(props.location.search).room)
+    if(this.props.User.UserName == '' ||  this.props.User.Room == '')
     {
-      alert("Please log in");
-      props.history.push('/');
+      this.props.history.push('/');
     }
-
-
     socket = io(this.state.ENDPOINT);
-   
-    
-
   }
   componentDidMount()
   {
@@ -165,15 +160,7 @@ GetMembers =() =>
               
               <div className="col-md-8 col-xl-6 chat">
                 <div className="card">
-                  <div className="card-header msg_head">
-                    <div className="d-flex bd-highlight">
-                      
-                      <div className="user_info">
-                        
-                        
-                      </div>
-                      
-                    </div>
+                  <div className="card-header msg_head">             
                     <Dropdown onClick={this.GetMembers} >
                       <Dropdown.Toggle variant="success" id="dropdown-basic">
                         Members in Room: {this.state.Room}
@@ -205,10 +192,10 @@ GetMembers =() =>
                                        )
                                      }
                                     
-                                   </div>
-                                   {this.state.UserName != this.state.typing.User&&<TypingMessage props={this.state.typing}/>}
+                  </div>
+                  {this.state.UserName != this.state.typing.User&&<TypingMessage props={this.state.typing}/>}
                                    
-                                   {/* {this.state.typing.Typing?<RMessageBox MSG='someone is typing' UNAME='alex' />:null} */}
+                  
                   </ScrollToBottom>
 
 
@@ -233,4 +220,16 @@ GetMembers =() =>
 
 }
 
-export default ChatScreen;
+const mapStateToProps = (state) =>
+{
+  return(
+    {
+      Math: state.MathReducer,
+      User: state.UserReducer
+      
+    }
+  );
+};
+
+
+export default connect(mapStateToProps)(ChatScreen);
