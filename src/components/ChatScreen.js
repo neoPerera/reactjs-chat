@@ -8,7 +8,12 @@ import  SMessageBox from './MessageBox';
 import  RMessageBox from './RMessageBox';
 import TypingMessage from './TypingMessage';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+//react bootstrap
 import { Dropdown } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
+
+//react-redux
 import {connect} from 'react-redux';
 
 
@@ -172,7 +177,8 @@ GetMembers =() =>
                       </Dropdown.Menu>
                     </Dropdown>
                    <a href="/" >
-                     <span id="action_menu_btn"><h3>Log out</h3> </span> </a>
+                    <span id="action_menu_btn"><Badge variant="danger">Log out</Badge></span>
+                    </a>
                     
                   </div>
 
