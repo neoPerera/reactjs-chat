@@ -118,9 +118,9 @@ class   App extends React.Component
                           />}
                           Login
                         </button>
-                        <a href="/signin" > 
+                        <Link to='/signin' > 
                           signup
-                        </a>
+                        </Link>
                   </div>
                   </form>
                 </div>
