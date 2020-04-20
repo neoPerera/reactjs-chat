@@ -4,26 +4,74 @@ import {useState} from 'react';
 import '../styles/App.css';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+//bootstrap
+import { Spinner } from 'react-bootstrap';
+
+
+//import endpoints
+import {ENDPOINT, LOGINENDPOINT} from '../endpoint/endpoint';
+
+//import axios
+import axios from 'axios';
 
 class   App extends React.Component 
 {
   constructor(props)
   {
     super(props);
-    console.log(props);
+    this.state ={
+      UserName:'',
+      Password: '',
+      IsLoading: false,
+    }
+
   }
 
   UserNameChange =(event) =>
   {
-    this.props.setName(event.target.value);
-    console.log("UserName:"+this.props.User.UserName);
+    this.setState({UserName: event.target.value});
     
   }
-  RoomChange =(event)=>
+  PasswordChange =(event)=>
   {
-    this.props.setRoom(event.target.value);
-    console.log("Room:"+this.props.User.Room);
+    this.setState({Password: event.target.value});
 
+  }
+  loginButtonClicked = () =>
+  {
+    if(this.state.UserName != '' && this.state.Password  != '')
+    {
+      //isloading
+      this.setState({IsLoading: true});
+
+      //post request
+      axios.post(LOGINENDPOINT, {UserName: this.state.UserName, Password: this.state.Password})
+      .then(res => {
+        console.log(res.data.auth);
+        if(res.data.auth)
+        {
+          //cookie
+          const varcookie = {auth: true, id: res.data.id, UserName: res.data.UserName};
+          localStorage.setItem('neoCookie', JSON.stringify(varcookie));
+          //redux
+          this.props.setId();
+          this.props.setName(res.data.UserName);
+          this.props.setRoom('common');
+          this.props.setAth();
+          this.props.history.push('/online');
+        }
+        else
+        {
+          this.setState({IsLoading: false});
+          this.setState({UserName:'',Password:'',});
+          alert('Invalid Username or Password');
+        }
+      });
+
+    }
+    else{
+      alert('please fill your details');
+    }
   }
 
 
@@ -43,13 +91,13 @@ class   App extends React.Component
                       <div className="input-group-append">
                         <span className="input-group-text"><i className="fas fa-user"></i></span>
                       </div>
-                      <input type="text"  onChange={this.UserNameChange} className="form-control input_user" placeholder="username" />
+                      <input type="text" value={this.state.UserName}  onChange={this.UserNameChange} className="form-control input_user" placeholder="username" />
                     </div>
                     <div className="input-group mb-2">
                       <div className="input-group-append">
                         <span className="input-group-text"><i className="fas fa-key"></i></span>
                       </div>
-                      <input type="text" onChange={this.RoomChange} className="form-control input_pass"  placeholder="room number" />
+                      <input type="password"  value={this.state.Password} onChange={this.PasswordChange} className="form-control input_pass"  placeholder="password" />
                     
                     </div>
                     <div className="form-group">
@@ -59,9 +107,20 @@ class   App extends React.Component
                       </div>
                     </div>
                       <div className="d-flex justify-content-center mt-3 login_container">
-                        <Link to={'/chatlist'}>
-                            <button type="button" name="button" className="btn login_btn">Login</button>
-                        </Link>
+                        
+                        <button onClick={this.loginButtonClicked} type="button" name="button" className="btn login_btn">
+                          {this.state.IsLoading&&<Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />}
+                          Login
+                        </button>
+                        <a href="/signin" > 
+                          signup
+                        </a>
                   </div>
                   </form>
                 </div>
@@ -91,20 +150,31 @@ const mapDispatchToProps = (dispatch)=>
   // ... normally is an object full of action creators
   return(
     {
-        setName: (props) =>{
-          dispatch({
-            type: 'SET_NAME',
+      setId: (props) =>{
+        dispatch({
+          type: 'SET_ID',
+          payload: props
+        });
+      },
+      setName: (props) =>{
+        dispatch({
+          type: 'SET_NAME',
+          payload: props
+        });
+      },
+      setRoom: (props) =>{
+        dispatch(
+          {
+            type: "SET_ROOM",
             payload: props
-          });
-        },
-        setRoom: (props) =>{
-          dispatch(
-            {
-              type: "SET_ROOM",
-              payload: props
-            }
-          );
-        }
+          }
+        );
+      },
+      setAth: (props) =>{
+        dispatch({
+          type: 'SET_AUTH'
+        });
+      }
         
     }
   );

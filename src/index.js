@@ -11,9 +11,11 @@ import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import ChatScreen from './components/ChatScreen';
+import OnlineList from './components/OnlineList';
 
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import SignIn from './components/SignIn';
 
 
 
@@ -25,6 +27,8 @@ ReactDOM.render(
       <Provider store={store}>
         <Route path="/" exact component={App} />
         <Route path="/chatlist" component={ChatScreen} />
+        <Route path="/online" component ={OnlineList} />
+        <Route path="/signin" component={SignIn} />
       </Provider>
     </Switch>
   </Router>,

@@ -222,6 +222,10 @@ padding-right: 10px;
 cursor: pointer;
 background-color: rgba(0,0,0,0.2);
 }
+.loadinAnnimation{
+    margin-top: auto;
+    margin-bottom: auto;
+}
 @media(max-width: 576px){
 .contacts_card{
 margin-bottom: 15px !important;
