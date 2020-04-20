@@ -13,7 +13,7 @@ import { json } from 'body-parser';
 import axios from 'axios';
 import {GETKEY} from '../endpoint/endpoint';
 
-
+import {ENDPOINT} from '../endpoint/endpoint';
 
 let socket = [];
 let tempSock;
@@ -34,7 +34,6 @@ class OnlineList extends React.Component
       		//variables /states
     		UserName: this.props.User.UserName,
       		Room: this.props.User.Room,
-      		ENDPOINT: 'localhost:5000',
 	  		MemberList: [],
 			myCookie: JSON.parse(localStorage.getItem('neoCookie')),
 			IsLoading: false
@@ -44,7 +43,7 @@ class OnlineList extends React.Component
       
 		}
 	//pushing to array socket
-	socket.push(io(this.state.ENDPOINT));
+	socket.push(io(ENDPOINT));
 	// tempSock = io(this.state.ENDPOINT);
 	}
 	//component did mount function
