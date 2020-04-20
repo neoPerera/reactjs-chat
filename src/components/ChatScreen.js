@@ -4,6 +4,7 @@ import '../styles/ChatScreen.css'
 import queryString from 'query-string';
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import {Link} from 'react-router-dom';
 
 //components
 import  SMessageBox from './MessageBox';
