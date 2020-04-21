@@ -23,7 +23,7 @@ class OnlineList extends React.Component
 	constructor(props)
   	{
 		super(props);
-		if(!localStorage.getItem('neoCookie'))
+		if(localStorage.getItem('neoCookie')==null)
 		{
 			this.props.history.push('/');
 		}
