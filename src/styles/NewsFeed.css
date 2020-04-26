@@ -54,11 +54,21 @@ html, body {
 {padding-bottom: 20px;}
 
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 400px) {
     .tosts
     {
-        width: 250px;
-        left: 20vw;
+        width:  300px;
+     
+        left: 18vw;
+    }
+    
+}
+@media only screen and (max-width: 400px) {
+    .tosts
+    {
+        width:  150px;
+     
+        left: 24vw;
     }
     
 }
