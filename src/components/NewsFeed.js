@@ -84,12 +84,12 @@ class NewsFeed extends Component {
             //catching Posts
             socket[0].on('sendingPostToUsers', (props) => {
                 console.log(props);
-                this.setState({ gotPosts: [ props,...this.state.gotPosts] });
+                this.setState({ gotPosts: [props, ...this.state.gotPosts] });
             });
             //initialsendingPostToUsers
             socket[0].on('initialsendingPostToUsers', (props) => {
                 console.log(props);
-                this.setState({ gotPosts: props});
+                this.setState({ gotPosts: props });
             });
 
         }
@@ -211,6 +211,51 @@ class NewsFeed extends Component {
                         </NavItem>
                     </SideNav.Nav>
                 </SideNav>
+
+                
+
+                <Container fluid className='cont'>
+                    <ReactShadowScroll className='scroll'>
+                        <Card className="text-center">
+                            <Card.Header>Type to post</Card.Header>
+                            <Card.Body>
+                                <Card.Title>
+                                    <input value={this.state.sendPostText} onChange={this.postTextAraeaChanged} type='text' className='sendposttext' />
+                                    <button onClick={this.postSend}>Post</button>
+                                </Card.Title>
+                                <Card.Text>
+
+                                </Card.Text>
+
+                            </Card.Body>
+                            <Card.Footer className="text-muted"></Card.Footer>
+                        </Card>
+
+                        {
+                            this.state.gotPosts.map(
+                                (item) =>
+                                    <div className="postitemsClass">
+                                        <Card className="text-center">
+                                            <Card.Header>{item.USER}</Card.Header>
+                                            <Card.Body>
+                                                <Card.Title></Card.Title>
+                                                <Card.Text>
+                                                    {item.POST}
+                                                </Card.Text>
+
+                                            </Card.Body>
+                                            <Card.Footer className="text-muted">{item.DATE}</Card.Footer>
+                                        </Card>
+
+                                    </ div>
+                            )
+                        }
+
+                    </ReactShadowScroll>
+
+
+
+                </Container>
                 <div className="cont1">
 
                     {/* message popup */}
@@ -221,49 +266,6 @@ class NewsFeed extends Component {
                     )
                     }
                 </div>
-
-                <Container fluid className='cont'>
-
-                    <Card className="text-center">
-                        <Card.Header>Type to post</Card.Header>
-                        <Card.Body>
-                            <Card.Title>
-                                <input value={this.state.sendPostText} onChange={this.postTextAraeaChanged} type='text' className='sendposttext' />
-                                <button onClick={this.postSend}>Post</button>
-                            </Card.Title>
-                            <Card.Text>
-
-                            </Card.Text>
-
-                        </Card.Body>
-                        <Card.Footer className="text-muted"></Card.Footer>
-                    </Card>
-                    <ReactShadowScroll className='scroll'>
-                        {
-                            this.state.gotPosts.map(
-                                (item) =>
-                                    <div className="postitemsClass">
-                                    <Card className="text-center">
-                                        <Card.Header>{item.USER}</Card.Header>
-                                        <Card.Body>
-                                            <Card.Title></Card.Title>
-                                            <Card.Text>
-                                                {item.POST}
-                                            </Card.Text>
-
-                                        </Card.Body>
-                                        <Card.Footer className="text-muted">{item.DATE}</Card.Footer>
-                                    </Card>
-                                    
-                                    </ div>
-                            )
-                        }
-
-                    </ReactShadowScroll>
-
-
-
-                </Container>
 
 
             </div>
