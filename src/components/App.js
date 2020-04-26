@@ -19,7 +19,7 @@ class App extends React.Component {
     super(props);
     if (localStorage.getItem('neoCookie') != null) {
       if (JSON.parse(localStorage.getItem('neoCookie')).auth == true) {
-        this.props.history.push('/online');
+        this.props.history.push('/feed');
       }
 
 

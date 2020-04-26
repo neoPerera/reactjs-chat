@@ -19,6 +19,13 @@ import { Spinner } from 'react-bootstrap';
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
+    if (localStorage.getItem('neoCookie') != null) {
+      if (JSON.parse(localStorage.getItem('neoCookie')).auth == true) {
+        this.props.history.push('/feed');
+      }
+
+
+    }
     this.state =
     {
       UserName: '',
