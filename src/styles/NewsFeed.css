@@ -32,15 +32,14 @@ html, body {
     position: absolute;
     z-index: 2;
     height: 100vh;
-    min-width: 200px;
-    width: 100%;
+    width: 52vw;
+    min-width: 450px;
     overflow-y: scroll;
 }
 .tosts
 {
-    min-width: 200px;
     position: relative;
-    left: 18vw;
+    left: 10vw;
     z-index: 3;
 }
 .popUpMessage
