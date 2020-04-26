@@ -1,4 +1,4 @@
-const IniTialState = {id: '',UserName: '', Room: '', auth: false};
+const IniTialState = {id: '',UserName: '', Room: '', auth: false, chatOpen: false};
 
 const UserReducer = (state = IniTialState, action) =>
 {
@@ -15,6 +15,9 @@ const UserReducer = (state = IniTialState, action) =>
         return state;
     case 'SET_AUTH':
         state.auth = !state.auth;
+        return state;
+    case 'SET_CHAT_OPEN':
+        state.chatOpen = !state.chatOpen;
         return state;
     default:
         return state;

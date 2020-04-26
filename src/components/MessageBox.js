@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../styles/ChatScreen.css'
+// import '../styles/ChatScreen-OnlineList.css';
 
 const SMessageBox =({MSG}) =>(
           <div className="d-flex justify-content-end mb-4">

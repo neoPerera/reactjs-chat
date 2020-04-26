@@ -1,22 +1,19 @@
 import React, { Component } from 'react'
-import '../styles/ChatScreen.css'
+// import '../styles/ChatScreen-OnlineList.css';
 import RMessageBox from './RMessageBox';
 
-  
-const TypingMessage = ({props}) =>
-{
-    if(props.Typing)
-    {
-        return(
-            <RMessageBox MSG={`${props.User} is typing`} />
-            );
-        
+
+const TypingMessage = ({ props }) => {
+    if (props.Typing) {
+        return (
+            <p>{props.User} is typing</p>
+        );
+
     }
-    else
-    {
+    else {
         return null;
     }
-   
+
 }
 
 export default TypingMessage;
