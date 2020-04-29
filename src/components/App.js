@@ -7,9 +7,12 @@ import { connect } from 'react-redux';
 //bootstrap
 import { Spinner } from 'react-bootstrap';
 
+//react google
+import { GoogleLogin } from 'react-google-login';
+
 
 //import endpoints
-import { ENDPOINT, LOGINENDPOINT } from '../endpoint/endpoint';
+import { ENDPOINT, LOGINENDPOINT, AUTHENDPOINT } from '../endpoint/endpoint';
 
 //import axios
 import axios from 'axios';
@@ -72,9 +75,46 @@ class App extends React.Component {
       alert('please fill your details');
     }
   }
+  responseGoogle = (props) => {
+    console.log(props);
+    // profileObj: {…}
+    // ​​
+    // email: "chanuthnilushan@gmail.com"
+    // ​​
+    // familyName: "Perera"
+    // ​​
+    // givenName: "Neo"
+    // ​​
+    // googleId: "115855698821206833510"
+    // ​​
+    // imageUrl: "https://lh3.googleusercontent.com/a-/AOh14GhfZBHM2ddu0M1TkHGR5cYEe4ga4K_k31Ji7nC30A=s96-c"
+    // ​​
+    // name: "Neo Perera"
 
+
+
+    axios.post(AUTHENDPOINT, { Authprops: props.profileObj})
+        .then(res => {
+          console.log(res.data.auth);
+          if (res.data.auth) {
+            //cookie
+            const varcookie = { auth: true, id: res.data.id, UserName: res.data.UserName };
+            localStorage.setItem('neoCookie', JSON.stringify(varcookie));
+            //redux
+            this.props.setId();
+            this.props.setName(res.data.UserName);
+            this.props.setRoom('common');
+            this.props.setAth();
+            this.props.history.push('/feed');
+          }
+          else {
+            alert('auth error');
+          }
+        });
+  }
 
   render() {
+
     return (
       <div>
         <div className="container h-100">
@@ -119,7 +159,16 @@ class App extends React.Component {
                     <Link to='/signin' >
                       signup
                         </Link>
+
+
                   </div>
+                  <GoogleLogin
+                    clientId="1048926104629-lmb4i2d5ve9ofg6ok573fsoih477ac3f.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={this.responseGoogle}
+                    // onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                  />
                 </form>
               </div>
 
