@@ -92,6 +92,17 @@ class NewsFeed extends Component {
                 this.setState({ gotPosts: props });
             });
 
+            //getting notification
+            socket[0].on('notification', (props) => {
+
+                console.log('notification ==>' + JSON.stringify(props));
+                this.ClickedOnUser(props.MsgFrom);
+
+            });
+
+
+
+
         }
     }
     messageCallback = (prop) => {
@@ -125,6 +136,8 @@ class NewsFeed extends Component {
                         console.log('response =>' + JSON.stringify(res.data))
                         this.setState({ roomkey: res.data.Roomkey });
                         localStorage.setItem('ROOMKEY', res.data.Roomkey);
+                        //recievers id
+                        localStorage.setItem('RECIEVERID', e);
                         // this.props.history.push('/chatlist');
 
 
@@ -212,7 +225,7 @@ class NewsFeed extends Component {
                     </SideNav.Nav>
                 </SideNav>
 
-                
+
 
                 <Container fluid className='cont'>
                     <ReactShadowScroll className='scroll'>

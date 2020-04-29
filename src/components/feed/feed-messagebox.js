@@ -36,11 +36,12 @@ class FeedMessage extends Component {
             // Room: queryString.parse(props.location.search).room,
             myCookie: JSON.parse(localStorage.getItem('neoCookie')),
             UserName: this.props.User.UserName,
+            Receiver: localStorage.getItem('RECIEVERID'),//this is for storing receivers id
             Room: this.props.Roomkey,
             gotMessages: [],
             sendMessage: '',
             typing: [],
-            MemberList: []
+            MemberList: [],
 
 
 
@@ -97,7 +98,11 @@ class FeedMessage extends Component {
     }
     sendButtonPressed = () => {
         console.log(this.state.gotMessages);
-        socket.emit('sendMessage', { User: this.state.UserName, Text: this.state.sendMessage }
+        socket.emit('sendMessage', { 
+            User: this.state.UserName, 
+            Text: this.state.sendMessage,
+            User1: this.state.myCookie.id, 
+            User2:  this.state.Receiver}
             , () => {
                 alert("ERROR");
                 this.props.history.push('/online')
@@ -135,7 +140,7 @@ class FeedMessage extends Component {
     }
     setToggleChat = () => {
 
-        localStorage.removeItem('ROOMKEY');
+
         socket.emit('disconnect');
         socket.off();
 
