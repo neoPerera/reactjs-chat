@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import SignIn from './components/SignIn';
 import NewsFeed from './components/NewsFeed';
+import NodeEnc from './components/encryption/NodeEnc';
 
 
 
@@ -30,6 +31,7 @@ ReactDOM.render(
         {/* <Route path="/chatlist" component={ChatScreen} />
         <Route path="/online" component ={OnlineList} /> */}
         <Route path="/signin" component={SignIn} />
+        <Route path="/enc" component={NodeEnc} />
       </Provider>
     </Switch>
   </Router>,

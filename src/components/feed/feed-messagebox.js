@@ -12,6 +12,15 @@ import { ENDPOINT } from '../../endpoint/endpoint';
 //socket io
 import io from 'socket.io-client';
 import TypingMessage from '../TypingMessage';
+
+//switch button
+import Switch from '@material-ui/core/Switch';
+
+//encryption
+import NodeRSA from 'node-rsa';
+
+
+
 let socket;
 
 
@@ -42,6 +51,14 @@ class FeedMessage extends Component {
             sendMessage: '',
             typing: [],
             MemberList: [],
+            secureCheck: false, //used this to establish secure coonnection
+            ReciverSecureCheck: false, //used this to establish secure coonnection
+            key: new NodeRSA({ b: 512 }),
+            privateKey: null,
+            publicKey: null,
+            ReciverPublicKey: null,
+            CypherText: '',
+            PlainText: '',
 
 
 
@@ -52,18 +69,47 @@ class FeedMessage extends Component {
     //in here im going to connect to a socket
     componentDidMount() {
         if (localStorage.getItem('neoCookie') != null) {
+            this.setState({
+
+                privateKey: new NodeRSA(this.state.key.exportKey('private')),
+                publicKey: new NodeRSA(this.state.key.exportKey('public')),
+
+            });
+
             console.log(this.state.UserName);
             socket.emit('join', { id: this.state.myCookie.id, UserName: this.state.UserName, Room: this.state.Room }, () => {
                 alert("ERROR");
 
             })
 
+
             socket.on('message',
                 (getMessage) => {
-                    this.setState({
-                        gotMessages: [...this.state.gotMessages, getMessage]
-                    },
-                    );
+                    if (this.state.secureCheck == true && this.state.ReciverSecureCheck == true) {
+                        if (getMessage.User != this.state.UserName) {
+                            this.setState({ PlainText: this.state.privateKey.decrypt(getMessage.Text, 'utf8') }, () => {
+                                
+                                this.setState({
+                                    gotMessages: [...this.state.gotMessages, 
+                                        {
+                                            User: getMessage.User,
+                                            Text: this.state.PlainText,
+                                            User1: getMessage.User1,
+                                            User2: getMessage.User2
+                                        }
+                                    ]
+                                });
+                            });
+                        }
+                        
+
+                    }
+                    else {
+                        this.setState({
+                            gotMessages: [...this.state.gotMessages, getMessage]
+                        },
+                        );
+                    }
 
                 }
 
@@ -87,6 +133,21 @@ class FeedMessage extends Component {
 
 
             );
+            //setting secure ServerSendPublicKey
+            socket.on('ServerSendPublicKey',
+                (getProps) => {
+
+
+
+                    if (getProps.User != this.state.UserName) {
+                        console.log('key recived =>' + getProps.Key);
+                        this.setState({ ReciverPublicKey: new NodeRSA(getProps.Key), ReciverSecureCheck: getProps.Checked });
+                    }
+
+                }
+
+
+            );
 
 
         }
@@ -97,23 +158,66 @@ class FeedMessage extends Component {
 
     }
     sendButtonPressed = () => {
-        console.log(this.state.gotMessages);
-        socket.emit('sendMessage', { 
-            User: this.state.UserName, 
-            Text: this.state.sendMessage,
-            User1: this.state.myCookie.id, 
-            User2:  this.state.Receiver}
-            , () => {
+
+        if (this.state.secureCheck == true && this.state.ReciverSecureCheck == true) {
+            this.setState({ CypherText: this.state.ReciverPublicKey.encrypt(this.state.sendMessage, 'base64') },
+                () => {
+                    console.log(this.state.CypherText);
+                    console.log(this.state.gotMessages);
+                    socket.emit('sendMessage', {
+                        User: this.state.UserName,
+                        Text: this.state.CypherText,
+                        User1: this.state.myCookie.id,
+                        User2: this.state.Receiver
+                    }
+                        , () => {
+                            alert("ERROR");
+                            this.props.history.push('/online')
+                        });
+                    this.setState({
+                        gotMessages: [...this.state.gotMessages, {
+                            User: this.state.UserName,
+                            Text: this.state.sendMessage,
+                            User1: this.state.myCookie.id,
+                            User2: this.state.Receiver
+                        }]
+                    });
+                    this.setState({
+                        sendMessage: '',
+                        CypherText: ''
+                    });
+                    socket.emit('typing', { User: this.state.UserName, Typing: false }, () => {
+                        alert("ERROR");
+                        this.props.history.push('/online')
+                    });
+                }
+
+            );
+
+        }
+        else {
+            console.log(this.state.gotMessages);
+            socket.emit('sendMessage', {
+                User: this.state.UserName,
+                Text: this.state.sendMessage,
+                User1: this.state.myCookie.id,
+                User2: this.state.Receiver
+            }
+                , () => {
+                    alert("ERROR");
+                    this.props.history.push('/online')
+                });
+            this.setState({
+                sendMessage: ''
+            });
+            socket.emit('typing', { User: this.state.UserName, Typing: false }, () => {
                 alert("ERROR");
                 this.props.history.push('/online')
             });
-        this.setState({
-            sendMessage: ''
-        });
-        socket.emit('typing', { User: this.state.UserName, Typing: false }, () => {
-            alert("ERROR");
-            this.props.history.push('/online')
-        });
+
+        }
+
+
     }
     textAreacChanged = (e) => {
         if (e.target.value != '') {
@@ -148,6 +252,19 @@ class FeedMessage extends Component {
         localStorage.removeItem('ROOMKEY');
 
     }
+    SetSecure = (e) => {
+        console.log('sending key =>' + this.state.publicKey);
+        this.setState(
+            {
+                secureCheck: e.target.checked
+            }
+        );
+        //sendPublicKey
+        socket.emit('sendPublicKey', { User: this.state.UserName, Key: this.state.key.exportKey('public'), Checked: e.target.checked }, () => {
+            alert("ERROR");
+            this.props.history.push('/online')
+        })
+    }
     componentWillUnmount() {
         if (localStorage.getItem('neoCookie' != null)) {
             localStorage.removeItem('ROOMKEY');
@@ -165,8 +282,10 @@ class FeedMessage extends Component {
                 <Toast className='tosts' show={true} onClose={this.setToggleChat} >
                     <Toast.Header>
                         <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-                        <strong className="mr-auto">Reciever</strong>
-
+                        <strong className="mr-auto">Receiver</strong>
+                        <p>secure <Switch checked={this.state.secureCheck} onChange={this.SetSecure} />
+                            <Switch disabled checked={this.state.ReciverSecureCheck} />
+                        </p>
 
                     </Toast.Header>
                     <Toast.Body>
