@@ -1,10 +1,15 @@
 //heroku server
 //https://neo-chatv1.herokuapp.com/
 
-const ENDPOINT = "https://neo-chatv1.herokuapp.com/";
-const LOGINENDPOINT = "https://neo-chatv1.herokuapp.com/login";
-const GETKEY = "https://neo-chatv1.herokuapp.com/getkey";
-const AUTHENDPOINT = "https://neo-chatv1.herokuapp.com/auth";
+const ENDPOINT = "https://neochatv2-api-express.onrender.com/";
+const LOGINENDPOINT = "https://neochatv2-api-express.onrender.com/login";
+const GETKEY = "https://neochatv2-api-express.onrender.com/getkey";
+const AUTHENDPOINT = "https://neochatv2-api-express.onrender.com/auth";
+
+// const ENDPOINT = "https://neo-chatv1.herokuapp.com/";
+// const LOGINENDPOINT = "https://neo-chatv1.herokuapp.com/login";
+// const GETKEY = "https://neo-chatv1.herokuapp.com/getkey";
+// const AUTHENDPOINT = "https://neo-chatv1.herokuapp.com/auth";
 
 //localhost
 
