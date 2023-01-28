@@ -31,7 +31,7 @@ ReactDOM.render(
         {/* <Route path="/chatlist" component={ChatScreen} />
         <Route path="/online" component ={OnlineList} /> */}
         <Route path="/signin" component={SignIn} />
-        <Route path="/enc" component={NodeEnc} />
+        {/* <Route path="/enc" component={NodeEnc} /> */}
       </Provider>
     </Switch>
   </Router>,
