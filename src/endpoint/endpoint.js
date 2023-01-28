@@ -2,9 +2,9 @@
 //https://neo-chatv1.herokuapp.com/
 
 const ENDPOINT = "https://neochatv2-api-express.onrender.com/";
-const LOGINENDPOINT = "https://neochatv2-api-express.onrender.com/login";
-const GETKEY = "https://neochatv2-api-express.onrender.com/getkey";
-const AUTHENDPOINT = "https://neochatv2-api-express.onrender.com/auth";
+const LOGINENDPOINT = ENDPOINT + "login";
+const GETKEY = ENDPOINT + "getkey";
+const AUTHENDPOINT = ENDPOINT + "auth";
 
 // const ENDPOINT = "https://neo-chatv1.herokuapp.com/";
 // const LOGINENDPOINT = "https://neo-chatv1.herokuapp.com/login";
