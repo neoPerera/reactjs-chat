@@ -29,7 +29,7 @@ ReactDOM.render(
       <Provider store={store}>
         <Route path="/" exact component={App} />
         <Route path="/feed" component ={NewsFeed} />
-        <Route path="/newsfeed" component ={NewNewsFeed} />
+        {/* <Route path="/newsfeed" component ={NewNewsFeed} /> */}
         {/* <Route path="/chatlist" component={ChatScreen} />
         <Route path="/online" component ={OnlineList} /> */}
         <Route path="/signin" component={SignIn} />
