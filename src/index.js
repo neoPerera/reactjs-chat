@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import SignIn from './components/SignIn';
 import NewsFeed from './components/NewsFeed';
+import NewNewsFeed from './components/NewNewsFeed';
 import NodeEnc from './components/encryption/NodeEnc';
 
 
@@ -28,6 +29,7 @@ ReactDOM.render(
       <Provider store={store}>
         <Route path="/" exact component={App} />
         <Route path="/feed" component ={NewsFeed} />
+        <Route path="/newsfeed" component ={NewNewsFeed} />
         {/* <Route path="/chatlist" component={ChatScreen} />
         <Route path="/online" component ={OnlineList} /> */}
         <Route path="/signin" component={SignIn} />
