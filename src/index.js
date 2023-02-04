@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import SignIn from './components/SignIn';
 import NewsFeed from './components/NewsFeed';
-import NewNewsFeed from './components/NewNewsFeed';
+// import NewNewsFeed from './components/NewNewsFeed';
 import NodeEnc from './components/encryption/NodeEnc';
 
 
