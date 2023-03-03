@@ -313,12 +313,7 @@ class NewsFeed extends Component {
                                             <p>{item.POST}</p>
                                         </div>
         
-                                    <div className="post__image">
-                                        <img
-                                        src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
-                                        alt=""
-                                        />
-                                    </div>
+                                    
         
                                     <div className="post__options">
                                         <div className="post__option">
