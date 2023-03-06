@@ -310,6 +310,10 @@ class NewsFeed extends Component {
                                         </div>
         
                                         <div className="post__bottom">
+                                            <img style={{ width: 300, height: 300 }}
+                                            src={item.IMAGE}
+                                            alt=""
+                                            />
                                             <p>{item.POST}</p>
                                         </div>
         
